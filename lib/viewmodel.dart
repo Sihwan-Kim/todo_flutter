@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,7 +19,7 @@ class PostHelper
       onUpgrade: (Database db, int oldVersion, int newVersion) => {},
     );
   }
-
+  //----------------------------------------------------------------------------------------- 
   Future _onCreate(Database db, int version) async 
   {
     await db.execute('''
@@ -34,5 +32,6 @@ class PostHelper
       )
     ''');
   }
+  //-----------------------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------------------

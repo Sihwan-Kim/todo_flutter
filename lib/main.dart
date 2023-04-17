@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter/model.dart';
 import 'package:todo_flutter/addwork.dart';
 import 'package:provider/provider.dart';
-
-import 'dart:async';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 //----------------------------------------------------------------------------
 void main() 
 {
@@ -13,10 +9,7 @@ void main()
 	(
 		MultiProvider
 		(
-			providers: 
-			[
-				ChangeNotifierProvider(create: (_) => ChangeCountValue()),
-			],
+			providers: [ ChangeNotifierProvider(create: (_) => ChangeCountValue()),],
 			child: const MyToDoApp(),
 		),
   );
