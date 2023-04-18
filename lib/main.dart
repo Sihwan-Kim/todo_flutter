@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter/model.dart';
+import 'package:todo_flutter/viewmodel.dart';
 import 'package:todo_flutter/addwork.dart';
 import 'package:provider/provider.dart';
 //----------------------------------------------------------------------------
@@ -83,10 +84,11 @@ class MainPage extends StatelessWidget
 			),
 			floatingActionButton: FloatingActionButton
 			(
-        onPressed: () 
+        onPressed: () async
 				{ 
 					// context.read<ChangeCountValue>().changeFilterCount(FilterType.filterToday, 10); 
-					context.read<ChangeCountValue>().Append(ItemProperty('test', 0, const Icon(Icons.circle, color: Colors.yellow)));
+//					context.read<ChangeCountValue>().Append(ItemProperty('test', 0, const Icon(Icons.circle, color: Colors.yellow)));
+          await DatabaseHelper().initDB();
 				},   // debug 
 
         backgroundColor: Colors.lightBlue,

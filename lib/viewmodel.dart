@@ -1,37 +1,48 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'model.dart';
 //-----------------------------------------------------------------------------------------
-class PostHelper 
+class DatabaseHelper
 {
-  // 데이터베이스를 시작한다.
-  Future _openDb() async 
-  {  
-    final databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'my_database.db');
   
-    final db = await openDatabase
+  final String TableName = 'WorkLists';
+//-----------------------------------------------------------------------------------------
+  Future<Database?> get database async 
+  {
+    Database db = await initDB() ;
+
+    return db;
+  }
+//-----------------------------------------------------------------------------------------
+  initDB() async
+  {
+    String path = join(await getDatabasesPath(), 'todo_database.db');
+
+    return await openDatabase
     (
       path,
       version: 1,
-      onConfigure: (Database db) => {},
-      onCreate: _onCreate,
-      onUpgrade: (Database db, int oldVersion, int newVersion) => {},
+      onCreate:(db, version) async
+      {
+        await db.execute("CREATE TABLE WorkLists(id INTEGER PRIMARY KEY, name TEXT, count INTEGER, colorindex INTEGER)",) ;      
+      },
+      onUpgrade: (db, oldVersion, newVersion) {} 
     );
   }
-  //----------------------------------------------------------------------------------------- 
-  Future _onCreate(Database db, int version) async 
+//-----------------------------------------------------------------------------------------
+  Future insert(WorkListProperty list) async 
   {
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS posts 
-      (
-        id INTEGER PRIMARY KEY,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        created_at TEXT NOT NULL
-      )
-    ''');
+    final db = await database;
+
+    await db?.insert(TableName, list.toMap());
   }
-  //-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+  Future<void> delete(WorkListProperty worklist) async 
+  {
+    final db = await database;
+
+    await db?.delete(TableName, where: "id = ?", whereArgs: [worklist.id],);
+  }
 }
 //-----------------------------------------------------------------------------------------

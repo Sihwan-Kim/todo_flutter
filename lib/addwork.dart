@@ -1,8 +1,50 @@
 import 'package:flutter/material.dart';
-
-class AppendList extends StatelessWidget 
+import 'package:flutter/cupertino.dart';
+//----------------------------------------------------------------------------
+class AppendList extends StatefulWidget 
 {
-  const AppendList({super.key});
+  const AppendList({Key? key}) : super(key: key);
+
+  @override
+  State<AppendList> createState() => _HomePageState();
+}
+//----------------------------------------------------------------------------
+class _HomePageState extends State<AppendList> 
+{
+  DateTime? _chosenDateTime;
+
+  void _showDatePicker(ctx)    // Show the modal that contains the CupertinoDatePicker
+  {    
+    showCupertinoModalPopup  // showCupertinoModalPopup is a built-in function of the cupertino library
+    (
+      context: ctx,
+      builder: (_) => Container
+      (
+        height: 500,
+        color: const Color.fromARGB(255, 255, 255, 255),
+        child: Column
+        (
+          children: 
+          [
+            SizedBox
+            (
+              height: 400,
+              child: CupertinoDatePicker
+              (
+                initialDateTime: DateTime.now(),
+                onDateTimeChanged: (val) { setState(() { _chosenDateTime = val;}); }
+              ),
+            ),                 
+            CupertinoButton   // Close the modal
+            (
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(ctx).pop(),
+            ),
+          ],
+        ),
+      )
+    );
+  }
 
   @override
 	Widget build(BuildContext context)
@@ -26,7 +68,7 @@ class AppendList extends StatelessWidget
           TextButton
           (
             style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-            onPressed: () {},
+            onPressed: () => _showDatePicker(context),
             child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
           ),
         ],
@@ -66,6 +108,7 @@ class EditBox extends StatelessWidget
           Text( label, style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white),),
           TextFormField
           (
+            onTap: () {  },
             readOnly: readOnly,
             decoration: const InputDecoration
             (

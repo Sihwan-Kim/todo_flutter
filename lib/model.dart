@@ -10,12 +10,12 @@ enum FilterType
 //-----------------------------------------------------------------------------------------
 class WorkListProperty
 {
-  final int id;
-  final String name ;
-  final int count ;
-  final int colorIndex ;
+  int id;
+  String name ;
+  int count ;
+  int colorIndex ;
 
-  WorkListProperty({required this.id, required this.name, required this.count,required this.colorIndex}) ;
+  WorkListProperty(this.id, this.name, this.count, this.colorIndex) ;
 
   Map<String, dynamic> toMap() 
   {
