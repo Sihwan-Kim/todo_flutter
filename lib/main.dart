@@ -145,7 +145,7 @@ class ItemIdentity extends StatelessWidget
 				(
 					property.count.toString(), 
 					style: const TextStyle(fontSize: 20, color: Colors.white),
-				),
+				), 
 			) ,
 		);
 	}
