@@ -1,19 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 //----------------------------------------------------------------------------
-class AppendList extends StatefulWidget 
+class AppendList extends StatelessWidget
 {
-  const AppendList({Key? key}) : super(key: key);
+  const AppendList({super.key});
 
   @override
-  State<AppendList> createState() => _HomePageState();
+	Widget build(BuildContext context)
+	{
+		return Scaffold
+    (
+      appBar:	AppBar
+      (
+        backgroundColor: const Color.fromARGB(255, 40, 40, 40),
+        title: const Text('Append Work', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+        centerTitle: true,
+        leading: TextButton
+        (
+          style: TextButton.styleFrom(foregroundColor: Colors.white,), 
+          onPressed: () {},
+          child: const Text('Cancel', style: TextStyle(fontSize: 15, color: Colors.white),), 
+        ),
+        leadingWidth: 100,
+        actions:
+        [ 
+          TextButton
+          (
+            style: TextButton.styleFrom(foregroundColor: Colors.white,), 
+            onPressed: () {},
+            child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
+          ),
+        ],
+      ),
+      body: Column
+      (
+        children: 
+        [
+          const EditBox(label: 'Work Name', readOnly: false),
+          SingleSelect(),
+          const EditBox(label: 'Deadline', readOnly: true),
+          const EditBox(label: 'Alarm', readOnly: true),      
+        ],
+      ),
+      backgroundColor: Colors.black,
+    );
+  }
 }
 //----------------------------------------------------------------------------
-class _HomePageState extends State<AppendList> 
+class EditBox extends StatefulWidget 
+{
+  const EditBox({super.key, required this.label, required this.readOnly});
+  final String label;
+  final bool readOnly;
+
+  @override
+  State<EditBox> createState() => _EditBox();
+}
+//----------------------------------------------------------------------------
+class _EditBox extends State<EditBox>
 {
   DateTime? _chosenDateTime;
+  final myController = TextEditingController();
 
-  void _showDatePicker(ctx)    // Show the modal that contains the CupertinoDatePicker
+  void showDatePicker(ctx)    // Show the modal that contains the CupertinoDatePicker
   {    
     showCupertinoModalPopup  // showCupertinoModalPopup is a built-in function of the cupertino library
     (
@@ -46,57 +95,18 @@ class _HomePageState extends State<AppendList>
     );
   }
 
-  @override
-	Widget build(BuildContext context)
-	{
-		return Scaffold
-    (
-      appBar:	AppBar
-      (
-        backgroundColor: const Color.fromARGB(255, 40, 40, 40),
-        title: const Text('Append Work', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
-        centerTitle: true,
-        leading: TextButton
-        (
-          style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-          onPressed: () {},
-          child: const Text('Cancel', style: TextStyle(fontSize: 15, color: Colors.white),), 
-        ),
-        leadingWidth: 100,
-        actions:
-        [ 
-          TextButton
-          (
-            style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-            onPressed: () => _showDatePicker(context),
-            child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
-          ),
-        ],
-      ),
-      body: Column
-      (
-        children: 
-        [
-          const EditBox(label: 'Work Name', readOnly: false),
-          SingleSelect(),
-          const EditBox(label: 'Deadline', readOnly: true),
-          const EditBox(label: 'Alarm', readOnly: true),        
-        ],
-      ),
-      backgroundColor: Colors.black,
-    );
+  void _printLatestValue() 
+  {
+    myController.text = _chosenDateTime.toString() ;
   }
-}
-//----------------------------------------------------------------------------
-class EditBox extends StatelessWidget
-{
-	const EditBox({super.key, required this.label, required this.readOnly});
-  final String label;
-  final bool readOnly;
 
 	@override
 	Widget build(BuildContext context)
 	{
+    final String label = widget.label ;
+    final bool readOnly = widget.readOnly;
+    myController.addListener( _printLatestValue );
+
 		return Container
 		(
 			margin: const EdgeInsets.only(top:20.0), 
@@ -108,13 +118,16 @@ class EditBox extends StatelessWidget
           Text( label, style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white),),
           TextFormField
           (
-            onTap: () {  },
+            controller: myController,
+            validator: (value) {  },
+            style: const TextStyle(color: Colors.white, fontSize: 20,),
+            onTap: () { if(readOnly == true) showDatePicker(context); },
             readOnly: readOnly,
             decoration: const InputDecoration
             (
-              fillColor: Colors.white,
-              
-            )
+    	        border: OutlineInputBorder(),
+    	        labelText: '' ,
+            ),
           ),
         ],
       ),
@@ -145,7 +158,7 @@ class SingleSelect extends StatelessWidget
 						isSelected: _selections1,
 						children: const
 						[
-							Icon(Icons.ac_unit, color: Colors.white,),
+							Icon(Icons.width_normal_outlined, color: Colors.white,),
 							Icon(Icons.call, color: Colors.white,),
 							Text("WIFI"),
 						],
