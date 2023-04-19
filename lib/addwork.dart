@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 class AppendList extends StatelessWidget
 {
   AppendList({super.key});
-  bool _isChecked = false ;
 
   @override
 	Widget build(BuildContext context)
@@ -38,43 +37,63 @@ class AppendList extends StatelessWidget
       (
         children: 
         [
-          Container
-          (
-            margin: const EdgeInsets.only(top:20.0), 
-            color: const Color.fromARGB(255, 40, 40, 40),
-            child: Row
-            (
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children :
-              [ 
-                Switch
-                (
-                  value: _isChecked,
-                  onChanged: (value) { },
-                ),
-                Flexible
-                (
-                  child: TextFormField
-                  (
-                    style: const TextStyle(color: Colors.white, fontSize: 20,),
-                    decoration: const InputDecoration
-                    (
-                      border: OutlineInputBorder(),
-                      labelText: 'Work Name' ,
-                    ),  
-                  ),  
-                ),
-              ],
-            ),
-          ),
+          const EditWorkName(),
           const PrioritySelect(),
           Container(margin: const EdgeInsets.only(top:20.0),),
           const EditBox(label: 'Deadline'),
-          const EditBox(label: 'Alarm'),      
+          const EditBox(label: 'Alarm'),   
+          const WorkListSelect(),   
         ],
       ),  
       backgroundColor: Colors.black,  
     ); 
+  }
+}
+//----------------------------------------------------------------------------
+class EditWorkName extends StatefulWidget 
+{
+  const EditWorkName({super.key});
+
+  @override
+  State<EditWorkName> createState() => _EditWorkName();
+}
+//----------------------------------------------------------------------------
+class _EditWorkName extends State<EditWorkName>
+{
+  bool _isChecked = false ;
+
+  @override
+	Widget build(BuildContext context)
+	{
+		return Container
+    (
+      margin: const EdgeInsets.only(top:20.0), 
+      color: const Color.fromARGB(255, 40, 40, 40),
+      child: Row
+      (
+        children :
+        [ 
+          Switch
+          (
+            value: _isChecked,
+            onChanged: (value) { setState(() {_isChecked = value ;}); },
+          ),
+          Flexible
+          (
+            child: TextFormField
+            (
+              style: const TextStyle(color: Colors.white, fontSize: 20,),
+              decoration: const InputDecoration
+              (
+                border: OutlineInputBorder(),
+                labelText: 'Work Name' ,
+                labelStyle: TextStyle(color: Colors.blueGrey ),
+              ),  
+            ),  
+          ),
+        ],
+      ),
+    );
   }
 }
 //----------------------------------------------------------------------------
@@ -154,7 +173,8 @@ class _EditBox extends State<EditBox>
         decoration: InputDecoration
         (
           border: const OutlineInputBorder(),
-          labelText: widget.label ,
+          labelText: widget.label,
+          labelStyle: const TextStyle(color: Colors.blueGrey),
         ),
       ),
     );
@@ -184,7 +204,7 @@ class _PrioritySelect extends State<PrioritySelect>
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				children:
 				[
-					const Text('Priority', style: TextStyle(color: Colors.white), ),
+					const Text('Priority', style: TextStyle(color: Colors.white, fontSize: 18), ),
 					ToggleButtons
 					(
 						onPressed: (int index) { setState(() { _selections.fillRange(0, 4, false) ; _selections[index] = true;}); },
@@ -201,5 +221,49 @@ class _PrioritySelect extends State<PrioritySelect>
 			),
 		);
 	}
+}
+//----------------------------------------------------------------------------
+class WorkListSelect extends StatefulWidget
+{
+  const WorkListSelect({super.key});
+
+  @override
+  State<WorkListSelect> createState() => _WorkListSelect();
+}
+//----------------------------------------------------------------------------
+class _WorkListSelect extends State<WorkListSelect>
+{	
+  List<String> dropdownList = ['Purchase', 'My Work'];
+  String selectedDropdown = 'Purchase';
+
+	@override
+	Widget build(BuildContext context)
+  {
+    return Container
+		(
+      margin: const EdgeInsets.only(top:20.0), 
+			color: const Color.fromARGB(255, 40, 40, 40),
+      child: Row
+      (
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children:
+        [
+          const Text('List', style: TextStyle(color: Colors.white, fontSize: 18),),
+          DropdownButton
+          (
+            value: selectedDropdown,
+            items: dropdownList.map
+            ( 
+              (String item) 
+              { 
+                return DropdownMenuItem<String>(child: Text('$item', style: TextStyle(color: Colors.red),), value: item,);
+              }
+            ).toList(),
+            onChanged: (dynamic value) { setState(() { selectedDropdown = value;});},
+          ),
+        ]
+      )
+    );
+  }
 }
 //----------------------------------------------------------------------------
