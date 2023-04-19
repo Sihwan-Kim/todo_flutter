@@ -37,10 +37,29 @@ class AppendList extends StatelessWidget
       (
         children: 
         [
-          const EditBox(label: 'Work Name', readOnly: false),
-          SingleSelect(),
-          const EditBox(label: 'Deadline', readOnly: true),
-          const EditBox(label: 'Alarm', readOnly: true),      
+          Container
+          (
+            margin: const EdgeInsets.only(top:20.0), 
+            color: const Color.fromARGB(255, 40, 40, 40),
+            child: Column
+            (
+              children:
+              [
+                TextFormField
+                (
+                  style: const TextStyle(color: Colors.white, fontSize: 20,),
+                  decoration: const InputDecoration
+                  (
+                    border: OutlineInputBorder(),
+                    labelText: 'Work Name' ,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const PrioritySelect(),
+          const EditBox(label: 'Deadline'),
+          const EditBox(label: 'Alarm'),      
         ],
       ),
       backgroundColor: Colors.black,
@@ -50,9 +69,8 @@ class AppendList extends StatelessWidget
 //----------------------------------------------------------------------------
 class EditBox extends StatefulWidget 
 {
-  const EditBox({super.key, required this.label, required this.readOnly});
+  const EditBox({super.key, required this.label});
   final String label;
-  final bool readOnly;
 
   @override
   State<EditBox> createState() => _EditBox();
@@ -112,7 +130,6 @@ class _EditBox extends State<EditBox>
 	Widget build(BuildContext context)
 	{
     final String labelName = widget.label ;
-    final bool readOnly = widget.readOnly;
     myController.addListener( _printLatestValue );
 
 		return Container
@@ -128,8 +145,8 @@ class _EditBox extends State<EditBox>
           (
             controller: myController,
             style: const TextStyle(color: Colors.white, fontSize: 20,),
-            onTap: () { if(readOnly == true) showDatePicker(context); },
-            readOnly: readOnly,
+            onTap: () { showDatePicker(context); },
+            readOnly: true,
             decoration: const InputDecoration
             (
     	        border: OutlineInputBorder(),
@@ -142,10 +159,17 @@ class _EditBox extends State<EditBox>
 	}
 }
 //----------------------------------------------------------------------------
-class SingleSelect extends StatelessWidget
+class PrioritySelect extends StatefulWidget
 {
-	SingleSelect({super.key});
-	final _selections1 = [false, true, false];
+  const PrioritySelect({super.key});
+
+  @override
+  State<PrioritySelect> createState() => _PrioritySelect();
+}
+//----------------------------------------------------------------------------
+class _PrioritySelect extends State<PrioritySelect>
+{	
+  final List<bool> _selections = List.generate(4, (index) => false);
 
 	@override
 	Widget build(BuildContext context)
@@ -161,13 +185,14 @@ class SingleSelect extends StatelessWidget
 					const Text('Priority', style: TextStyle(color: Colors.white), ),
 					ToggleButtons
 					(
-						onPressed: (int index) {},
-						isSelected: _selections1,
+						onPressed: (int index) { setState(() { _selections.fillRange(0, 4, false) ; _selections[index] = true;}); },
+						isSelected: _selections,
 						children: const
 						[
-							Icon(Icons.width_normal_outlined, color: Colors.white,),
-							Icon(Icons.call, color: Colors.white,),
-							Text("WIFI"),
+              Text("NONE", style: TextStyle(color: Colors.white,),),
+              Text("P1", style: TextStyle(color: Colors.white,),),
+              Text("P2", style: TextStyle(color: Colors.white,),),
+              Text("P3", style: TextStyle(color: Colors.white,),),
 						],
 					),
 				]
