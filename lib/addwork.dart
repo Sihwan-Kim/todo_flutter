@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 //----------------------------------------------------------------------------
 class AppendList extends StatelessWidget
 {
@@ -97,13 +98,13 @@ class _EditBox extends State<EditBox>
 
   void _printLatestValue() 
   {
-    myController.text = _chosenDateTime.toString() ;
+    myController.text = DateFormat.yMd().add_jm().format(_chosenDateTime!); 
   }
 
 	@override
 	Widget build(BuildContext context)
 	{
-    final String label = widget.label ;
+    final String labelName = widget.label ;
     final bool readOnly = widget.readOnly;
     myController.addListener( _printLatestValue );
 
@@ -115,11 +116,10 @@ class _EditBox extends State<EditBox>
       (
         children:
         [
-          Text( label, style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white),),
+          Text(labelName, style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white),),
           TextFormField
           (
             controller: myController,
-            validator: (value) {  },
             style: const TextStyle(color: Colors.white, fontSize: 20,),
             onTap: () { if(readOnly == true) showDatePicker(context); },
             readOnly: readOnly,
