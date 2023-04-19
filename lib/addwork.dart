@@ -98,7 +98,14 @@ class _EditBox extends State<EditBox>
 
   void _printLatestValue() 
   {
-    myController.text = DateFormat.yMd().add_jm().format(_chosenDateTime!); 
+    try
+    {
+      myController.text = DateFormat.yMd().add_jm().format(_chosenDateTime!); 
+    }
+    catch(e)
+    {
+      myController.text = '' ;
+    }
   }
 
 	@override
