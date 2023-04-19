@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 //----------------------------------------------------------------------------
 class AppendList extends StatelessWidget
 {
-  const AppendList({super.key});
+  AppendList({super.key});
+  bool _isChecked = false ;
 
   @override
 	Widget build(BuildContext context)
@@ -41,29 +42,39 @@ class AppendList extends StatelessWidget
           (
             margin: const EdgeInsets.only(top:20.0), 
             color: const Color.fromARGB(255, 40, 40, 40),
-            child: Column
+            child: Row
             (
-              children:
-              [
-                TextFormField
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children :
+              [ 
+                Switch
                 (
-                  style: const TextStyle(color: Colors.white, fontSize: 20,),
-                  decoration: const InputDecoration
+                  value: _isChecked,
+                  onChanged: (value) { },
+                ),
+                Flexible
+                (
+                  child: TextFormField
                   (
-                    border: OutlineInputBorder(),
-                    labelText: 'Work Name' ,
-                  ),
+                    style: const TextStyle(color: Colors.white, fontSize: 20,),
+                    decoration: const InputDecoration
+                    (
+                      border: OutlineInputBorder(),
+                      labelText: 'Work Name' ,
+                    ),  
+                  ),  
                 ),
               ],
             ),
           ),
           const PrioritySelect(),
+          Container(margin: const EdgeInsets.only(top:20.0),),
           const EditBox(label: 'Deadline'),
           const EditBox(label: 'Alarm'),      
         ],
-      ),
-      backgroundColor: Colors.black,
-    );
+      ),  
+      backgroundColor: Colors.black,  
+    ); 
   }
 }
 //----------------------------------------------------------------------------
@@ -78,7 +89,7 @@ class EditBox extends StatefulWidget
 //----------------------------------------------------------------------------
 class _EditBox extends State<EditBox>
 {
-  DateTime? _chosenDateTime;
+  DateTime? _chosenDateTime = DateTime.now();
   final myController = TextEditingController();
 
   void showDatePicker(ctx)    // Show the modal that contains the CupertinoDatePicker
@@ -129,31 +140,22 @@ class _EditBox extends State<EditBox>
 	@override
 	Widget build(BuildContext context)
 	{
-    final String labelName = widget.label ;
     myController.addListener( _printLatestValue );
 
 		return Container
 		(
-			margin: const EdgeInsets.only(top:20.0), 
 			color: const Color.fromARGB(255, 40, 40, 40),
-      child: Column
+      child: TextFormField
       (
-        children:
-        [
-          Text(labelName, style: const TextStyle( fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white),),
-          TextFormField
-          (
-            controller: myController,
-            style: const TextStyle(color: Colors.white, fontSize: 20,),
-            onTap: () { showDatePicker(context); },
-            readOnly: true,
-            decoration: const InputDecoration
-            (
-    	        border: OutlineInputBorder(),
-    	        labelText: '' ,
-            ),
-          ),
-        ],
+        controller: myController,
+        style: const TextStyle(color: Colors.white, fontSize: 20,),
+        onTap: () { showDatePicker(context); },
+        readOnly: true,
+        decoration: InputDecoration
+        (
+          border: const OutlineInputBorder(),
+          labelText: widget.label ,
+        ),
       ),
     );
 	}
