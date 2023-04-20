@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter/model.dart';
-import 'package:todo_flutter/viewmodel.dart';
 import 'package:todo_flutter/addwork.dart';
 import 'package:provider/provider.dart';
 //----------------------------------------------------------------------------
@@ -61,7 +60,10 @@ class MainPage extends StatelessWidget
 					TextButton
 					(
 						style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-						onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AppendList()),);},
+						onPressed: () 
+            { 
+              // context.read<ChangeCountValue>().Append(ItemProperty('test', 0, const Icon(Icons.circle, color: Colors.yellow)));
+            },
 						child: const Text('Edit', style: TextStyle(fontSize: 20, color: Colors.white),), 
 					),
 				],
@@ -84,12 +86,10 @@ class MainPage extends StatelessWidget
 			),
 			floatingActionButton: FloatingActionButton
 			(
-        onPressed: () async
+        onPressed: () 
 				{ 
-					// context.read<ChangeCountValue>().changeFilterCount(FilterType.filterToday, 10); 
-//					context.read<ChangeCountValue>().Append(ItemProperty('test', 0, const Icon(Icons.circle, color: Colors.yellow)));
-          await DatabaseHelper().initDB();
-				},   // debug 
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AppendList()),);
+				},    
 
         backgroundColor: Colors.lightBlue,
         child: const Icon(Icons.add, size: 40,),

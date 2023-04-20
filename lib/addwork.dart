@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'model.dart';
+import 'package:provider/provider.dart';
 //----------------------------------------------------------------------------
 class AppendList extends StatelessWidget
 {
-  AppendList({super.key});
+  const AppendList({super.key});
 
   @override
 	Widget build(BuildContext context)
@@ -19,7 +21,7 @@ class AppendList extends StatelessWidget
         leading: TextButton
         (
           style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-          onPressed: () {},
+          onPressed: () { Navigator.pop(context); },
           child: const Text('Cancel', style: TextStyle(fontSize: 15, color: Colors.white),), 
         ),
         leadingWidth: 100,
@@ -146,14 +148,8 @@ class _EditBox extends State<EditBox>
 
   void _printLatestValue() 
   {
-    try
-    {
-      myController.text = DateFormat.yMd().add_jm().format(_chosenDateTime!); 
-    }
-    catch(e)
-    {
-      myController.text = '' ;
-    }
+    try{ myController.text = DateFormat.yMd().add_jm().format(_chosenDateTime!); }
+    catch(e) { myController.text = '' ; }
   }
 
 	@override
@@ -233,36 +229,43 @@ class WorkListSelect extends StatefulWidget
 //----------------------------------------------------------------------------
 class _WorkListSelect extends State<WorkListSelect>
 {	
-  List<String> dropdownList = ['Purchase', 'My Work'];
-  String selectedDropdown = 'Purchase';
+  String selectedDropdown = ChangeCountValue().workList[0].name;
 
 	@override
 	Widget build(BuildContext context)
   {
     return Container
-		(
+		(      
       margin: const EdgeInsets.only(top:20.0), 
 			color: const Color.fromARGB(255, 40, 40, 40),
-      child: Row
-      (
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children:
-        [
-          const Text('List', style: TextStyle(color: Colors.white, fontSize: 18),),
-          DropdownButton
-          (
-            value: selectedDropdown,
-            items: dropdownList.map
-            ( 
-              (String item) 
-              { 
-                return DropdownMenuItem<String>(child: Text('$item', style: TextStyle(color: Colors.red),), value: item,);
-              }
-            ).toList(),
-            onChanged: (dynamic value) { setState(() { selectedDropdown = value;});},
-          ),
-        ]
-      )
+      child: ChangeNotifierProvider
+			(
+				create: (BuildContext context) => ChangeCountValue(),
+        child: Row
+        (
+          children:
+          [
+            const Text('List', style: TextStyle(color: Colors.white, fontSize: 18),),
+            Container(margin: const EdgeInsets.only(left:20.0),),
+            Flexible
+            (
+              child: DropdownButton
+              (
+                isExpanded: true,
+                value: selectedDropdown,
+                items: context.watch<ChangeCountValue>().workList.map
+                (
+                  (ItemProperty property) 
+                  { 
+                    return DropdownMenuItem<String>(value: property.name, child: Text(property.name, style: const TextStyle(color: Colors.red),)) ;  
+                  }
+                ).toList(),
+                onChanged: (dynamic value) { setState(() { selectedDropdown = value;});},
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

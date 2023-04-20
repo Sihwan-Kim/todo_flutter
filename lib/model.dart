@@ -41,17 +41,17 @@ class ItemProperty
 class ChangeCountValue with ChangeNotifier
 {    
 	final List<ItemProperty> _filterItems = [
-										                  ItemProperty('Today', 0, const Icon(Icons.arrow_downward, color: Colors.red)),
-																			ItemProperty('Tomorrow', 0, const Icon(Icons.arrow_forward, color: Colors.lightBlue)),
-																			ItemProperty('This Week', 0, const Icon(Icons.window, color: Colors.lightBlue)),
-																			ItemProperty('Unlimitted', 0, const Icon(Icons.calendar_month, color: Colors.lightBlue)),
-																			ItemProperty('All', 0, const Icon(Icons.hive_rounded, color: Colors.lightBlue)),
-																 		    ] ;
+										                        ItemProperty('Today', 0, const Icon(Icons.arrow_downward, color: Colors.red)),
+																			      ItemProperty('Tomorrow', 0, const Icon(Icons.arrow_forward, color: Colors.lightBlue)),
+																			      ItemProperty('This Week', 0, const Icon(Icons.window, color: Colors.lightBlue)),
+																			      ItemProperty('Unlimitted', 0, const Icon(Icons.calendar_month, color: Colors.lightBlue)),
+																			      ItemProperty('All', 0, const Icon(Icons.hive_rounded, color: Colors.lightBlue)),
+																 		      ] ;
 
-	final List<ItemProperty> _workList = [
-		 								                  ItemProperty('My Work', 0, const Icon(Icons.circle, color: Colors.lightBlue),),
-								 			                ItemProperty('Purchase', 0, const Icon(Icons.circle, color: Colors.red),),
-										                  ] ;
+	final List<ItemProperty> _workList =  [
+		 								                      ItemProperty('My Work', 0, const Icon(Icons.circle, color: Colors.lightBlue),),
+								 			                    ItemProperty('Purchase', 0, const Icon(Icons.circle, color: Colors.red),),
+										                    ] ;
 
 	final List<ItemProperty>  _finishWork = [ ItemProperty('Finish', 0, const Icon(Icons.check_circle_outline, color: Colors.lightBlue)),];
 
