@@ -37,14 +37,14 @@ class AppendList extends StatelessWidget
       ),
       body: Column
       (
-        children: 
+        children: const
         [
-          const EditWorkName(),
-          const PrioritySelect(),
-          Container(margin: const EdgeInsets.only(top:20.0),),
-          const EditBox(label: 'Deadline'),
-          const EditBox(label: 'Alarm'),   
-          const WorkListSelect(),   
+          EditWorkName(),
+          PrioritySelect(),
+					SizedBox(height: 20,),
+          EditBox(label: 'Deadline'),
+          EditBox(label: 'Alarm'),   
+          WorkListSelect(),   
         ],
       ),  
       backgroundColor: Colors.black,  
@@ -230,23 +230,23 @@ class WorkListSelect extends StatefulWidget
 class _WorkListSelect extends State<WorkListSelect>
 {	
   String selectedDropdown = ChangeCountValue().workList[0].name;
-
-	@override
-	Widget build(BuildContext context)
+  
+  @override
+  Widget build(BuildContext context)
   {
     return Container
-		(      
+    (      
       margin: const EdgeInsets.only(top:20.0), 
 			color: const Color.fromARGB(255, 40, 40, 40),
       child: ChangeNotifierProvider
-			(
-				create: (BuildContext context) => ChangeCountValue(),
+      (
+	      create: (BuildContext context) => ChangeCountValue(),
         child: Row
         (
           children:
           [
             const Text('List', style: TextStyle(color: Colors.white, fontSize: 18),),
-            Container(margin: const EdgeInsets.only(left:20.0),),
+	 					const SizedBox(width: 20,),
             Flexible
             (
               child: DropdownButton

@@ -34,15 +34,23 @@ class MyToDoApp extends StatelessWidget
       },  
 			title: 'ToDo Application',
 			theme: ThemeData( primarySwatch: Colors.blue,),
-			home: const MainPage(title: 'List'),
+			home: const MainPage(),
 		);
 	}
 }
 //----------------------------------------------------------------------------
-class MainPage extends StatelessWidget 
+class MainPage extends StatefulWidget 
 {
-  const MainPage({super.key, required this.title});
-  final String title;
+  const MainPage({super.key,});
+
+  @override
+  State<MainPage> createState() => _MainPage();
+}
+//----------------------------------------------------------------------------
+class _MainPage extends State<MainPage> 
+{
+ // const MainPage({super.key, required this.title});
+  var _visibility = false;
 
   @override
 	Widget build(BuildContext context)
@@ -52,7 +60,7 @@ class MainPage extends StatelessWidget
 			appBar: AppBar
 			(
 				backgroundColor: const Color.fromARGB(255, 40, 40, 40),
-				title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+				title: const Text('List', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
 				centerTitle: true,
 				leading: const IconButton(icon: Icon(Icons.settings, color: Colors.white,), onPressed: null),
     		actions: 
@@ -62,7 +70,7 @@ class MainPage extends StatelessWidget
 						style: TextButton.styleFrom(foregroundColor: Colors.white,), 
 						onPressed: () 
             { 
-              // context.read<ChangeCountValue>().Append(ItemProperty('test', 0, const Icon(Icons.circle, color: Colors.yellow)));
+              setState(() {_visibility = !_visibility;});
             },
 						child: const Text('Edit', style: TextStyle(fontSize: 20, color: Colors.white),), 
 					),
@@ -79,6 +87,11 @@ class MainPage extends StatelessWidget
 						const Text('Filter', style: TextStyle(fontSize: 20, color: Colors.grey),),
 						Expanded(flex: 2, child: ListViewBuilder(listItems: context.watch<ChangeCountValue>().filterItems,),),
 						const Text('Work List', style: TextStyle(fontSize: 20, color: Colors.grey),),
+            Visibility
+            (
+              visible: _visibility,
+              child: const AppendListWidget(),
+            ),
 						Expanded(flex: 2, child: ListViewBuilder(listItems: context.watch<ChangeCountValue>().workList,),),
 						Expanded(flex: 1, child: ListViewBuilder(listItems: context.watch<ChangeCountValue>().finishWork,),),
 					],
@@ -146,6 +159,25 @@ class ItemIdentity extends StatelessWidget
 					property.count.toString(), 
 					style: const TextStyle(fontSize: 20, color: Colors.white),
 				), 
+			) ,
+		);
+	}
+}
+//-----------------------------------------------------------------------------------------
+class AppendListWidget extends StatelessWidget
+{
+	const AppendListWidget({super.key});
+
+	@override
+	Widget build(BuildContext context)
+	{
+		return Container
+		(
+			color:const Color.fromARGB(255, 40, 40, 40),
+			child: const ListTile
+			(
+				leading: Icon(Icons.add_circle_outline, color: Colors.green),
+				title: Text('Append Work List', style: const TextStyle(fontSize: 20, color: Colors.white),),
 			) ,
 		);
 	}
