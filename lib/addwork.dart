@@ -80,7 +80,7 @@ class _EditWorkName extends State<EditWorkName>
             value: _isChecked,
             onChanged: (value) { setState(() {_isChecked = value ;}); },
           ),
-          Flexible
+          Flexible                      // Flexible에 사용해야지만 에러가 발생하지 않는다. 
           (
             child: TextFormField
             (
@@ -229,7 +229,7 @@ class WorkListSelect extends StatefulWidget
 //----------------------------------------------------------------------------
 class _WorkListSelect extends State<WorkListSelect>
 {	
-  String selectedDropdown = ChangeCountValue().workList[0].name;
+  String selectedDropdown = ChangeListValue().workList[0].name;
   
   @override
   Widget build(BuildContext context)
@@ -240,7 +240,7 @@ class _WorkListSelect extends State<WorkListSelect>
 			color: const Color.fromARGB(255, 40, 40, 40),
       child: ChangeNotifierProvider
       (
-	      create: (BuildContext context) => ChangeCountValue(),
+	      create: (BuildContext context) => ChangeListValue(),
         child: Row
         (
           children:
@@ -253,7 +253,7 @@ class _WorkListSelect extends State<WorkListSelect>
               (
                 isExpanded: true,
                 value: selectedDropdown,
-                items: context.watch<ChangeCountValue>().workList.map
+                items: context.watch<ChangeListValue>().workList.map
                 (
                   (ItemProperty property) 
                   { 

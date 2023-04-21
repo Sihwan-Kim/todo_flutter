@@ -38,7 +38,7 @@ class ItemProperty
 	ItemProperty(this.name, this.count, this.icon) ;
 }
 //-----------------------------------------------------------------------------------------
-class ChangeCountValue with ChangeNotifier
+class ChangeListValue with ChangeNotifier
 {    
 	final List<ItemProperty> _filterItems = [
 										                        ItemProperty('Today', 0, const Icon(Icons.arrow_downward, color: Colors.red)),

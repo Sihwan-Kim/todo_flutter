@@ -9,7 +9,7 @@ void main()
 	(
 		MultiProvider
 		(
-			providers: [ ChangeNotifierProvider(create: (_) => ChangeCountValue()),],
+			providers: [ ChangeNotifierProvider(create: (_) => ChangeListValue()),],
 			child: const MyToDoApp(),
 		),
   );
@@ -44,13 +44,15 @@ class MainPage extends StatefulWidget
   const MainPage({super.key,});
 
   @override
-  State<MainPage> createState() => _MainPage();
+  State<MainPage> createState() => MainPageState();  
 }
 //----------------------------------------------------------------------------
-class _MainPage extends State<MainPage> 
+class MainPageState extends State<MainPage> 
 {
- // const MainPage({super.key, required this.title});
-  var _visibility = false;
+  var _visibility = false;  
+
+  set setVisible(value) => setState(() {_visibility = value;});
+  get visible => _visibility ;
 
   @override
 	Widget build(BuildContext context)
@@ -78,22 +80,22 @@ class _MainPage extends State<MainPage>
 			),
 			body: ChangeNotifierProvider
 			(
-				create: (BuildContext context) => ChangeCountValue(),
+				create: (BuildContext context) => ChangeListValue(),  
 			 	child: Column
 				(
 					crossAxisAlignment: CrossAxisAlignment.stretch,
 					children: 
 					[
 						const Text('Filter', style: TextStyle(fontSize: 20, color: Colors.grey),),
-						Expanded(flex: 2, child: ListViewBuilder(listItems: context.watch<ChangeCountValue>().filterItems,),),
+            Flexible(flex: 2, fit: FlexFit.loose , child: ListViewBuilder(listItems: context.watch<ChangeListValue>().filterItems,),),
 						const Text('Work List', style: TextStyle(fontSize: 20, color: Colors.grey),),
             Visibility
             (
               visible: _visibility,
               child: const AppendListWidget(),
             ),
-						Expanded(flex: 2, child: ListViewBuilder(listItems: context.watch<ChangeCountValue>().workList,),),
-						Expanded(flex: 1, child: ListViewBuilder(listItems: context.watch<ChangeCountValue>().finishWork,),),
+						Flexible(flex: 1, child: WorkListViewBuilder(listItems: context.watch<ChangeListValue>().workList,),),
+						Flexible(flex: 1, child: ListViewBuilder(listItems: context.watch<ChangeListValue>().finishWork,),),
 					],
 				),
 			),
@@ -101,7 +103,7 @@ class _MainPage extends State<MainPage>
 			(
         onPressed: () 
 				{ 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AppendList()),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AppendList()),);
 				},    
 
         backgroundColor: Colors.lightBlue,
@@ -126,14 +128,14 @@ class ListViewBuilder extends StatelessWidget
 			itemBuilder: (BuildContext context, int index) => Dismissible
 			(
         key: Key(listItems[index].name),
+        child: ItemIdentity(property: listItems[index]),
 				onDismissed: (direction) 
 				{
 					if(direction == DismissDirection.endToStart) 
 					{
-						context.read<ChangeCountValue>().removeAt(index) ;
+						context.read<ChangeListValue>().removeAt(index) ;
           }
 				},
-				child: ItemIdentity(property: listItems[index]),
 			),			
 		);
 	}
@@ -152,14 +154,82 @@ class ItemIdentity extends StatelessWidget
 			color:const Color.fromARGB(255, 40, 40, 40),
 			child: ListTile
 			(
-				leading: property.icon,
+				leading: property.icon, 
 				title: Text(property.name, style: const TextStyle(fontSize: 20, color: Colors.white),),
 				trailing: Text
 				(
 					property.count.toString(), 
 					style: const TextStyle(fontSize: 20, color: Colors.white),
-				), 
+				),
 			) ,
+		);
+	}
+}
+//-----------------------------------------------------------------------------------------
+class WorkListViewBuilder extends StatelessWidget
+{
+	const WorkListViewBuilder({super.key, required this.listItems});
+	final List<ItemProperty>  listItems ;
+
+	@override
+	Widget build(BuildContext context)
+	{
+		return ListView.builder
+		(
+			itemCount: listItems.length, //리스트의 개수
+			itemBuilder: (BuildContext context, int index) => Dismissible
+			(
+        key: Key(listItems[index].name),
+        child: WorkListItemIdentity(property: listItems[index]),
+				onDismissed: (direction) 
+				{
+					if(direction == DismissDirection.endToStart) 
+					{
+						context.read<ChangeListValue>().removeAt(index) ;
+          }
+				},
+			),			
+		);
+	}
+}
+//-----------------------------------------------------------------------------------------
+class WorkListItemIdentity extends StatelessWidget
+{
+	const WorkListItemIdentity({super.key, required this.property});
+	final ItemProperty property ;
+
+	@override
+	Widget build(BuildContext context)
+	{
+    MainPageState? parent = context.findAncestorStateOfType<MainPageState>(); 
+
+		return Container
+		(
+			color:const Color.fromARGB(255, 40, 40, 40),
+			child: Row
+      (
+        children :
+        [
+          Visibility
+          (
+            visible: parent!.visible ,
+            child: const Icon(Icons.delete_forever_outlined, color: Colors.red,),
+          ),
+          Flexible                      // Flexible에 사용해야지만 에러가 발생하지 않는다. 
+          (
+            child: ListTile
+            (
+              leading: property.icon, 
+              title: Text(property.name, style: const TextStyle(fontSize: 20, color: Colors.white),),
+              trailing: Text
+              (
+                property.count.toString(), 
+                style: const TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            )
+          ), 
+        ]
+      ),
 		);
 	}
 }
@@ -171,13 +241,20 @@ class AppendListWidget extends StatelessWidget
 	@override
 	Widget build(BuildContext context)
 	{
+    MainPageState? parent = context.findAncestorStateOfType<MainPageState>(); // Main Widget의 State에 접근하기 위해 필요하다. 
+
 		return Container
 		(
 			color:const Color.fromARGB(255, 40, 40, 40),
-			child: const ListTile
+			child: ListTile
 			(
-				leading: Icon(Icons.add_circle_outline, color: Colors.green),
-				title: Text('Append Work List', style: const TextStyle(fontSize: 20, color: Colors.white),),
+				leading: const Icon(Icons.add_circle_outline, color: Colors.green),
+				title: const Text('Append Work List', style: TextStyle(fontSize: 20, color: Colors.white),),
+        onTap: () 
+        {
+          parent!.setVisible = false ;  
+//          Navigator.push(context, MaterialPageRoute(builder: (context) => const AppendList()),); 
+        }, 
 			) ,
 		);
 	}
