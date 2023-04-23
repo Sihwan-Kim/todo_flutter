@@ -67,18 +67,20 @@ class ChangeListValue with ChangeNotifier
 	//-----------------------------------------------------------------------------------------
 	void removeAt(int index)
 	{
-		if(index >= 2)   // 0,1 은 지우지 않는다.
+		if(_workList.isNotEmpty && index < _workList.length)   
 		{
-			_workList.remove(index) ;
+			_workList.removeAt(index) ;
 			notifyListeners();  
 		}
 	}
 	//-----------------------------------------------------------------------------------------
-	void Append(ItemProperty Item)
+	void append(ItemProperty Item)
 	{
 		_workList.add(Item) ;
 		notifyListeners();  
 	}
 } 
 //-----------------------------------------------------------------------------------------
+
+ChangeListValue changeListValue = ChangeListValue() ;
  

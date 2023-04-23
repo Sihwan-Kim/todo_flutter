@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter/model.dart';
 import 'package:todo_flutter/addwork.dart';
 import 'package:provider/provider.dart';
+import 'new_work_list.dart';
 //----------------------------------------------------------------------------
 void main() 
 {
@@ -50,7 +51,6 @@ class MainPage extends StatefulWidget
 class MainPageState extends State<MainPage> 
 {
   var _visibility = false;  
-
   set setVisible(value) => setState(() {_visibility = value;});
   get visible => _visibility ;
 
@@ -125,43 +125,20 @@ class ListViewBuilder extends StatelessWidget
 		return ListView.builder
 		(
 			itemCount: listItems.length, //리스트의 개수
-			itemBuilder: (BuildContext context, int index) => Dismissible
-			(
-        key: Key(listItems[index].name),
-        child: ItemIdentity(property: listItems[index]),
-				onDismissed: (direction) 
-				{
-					if(direction == DismissDirection.endToStart) 
-					{
-						context.read<ChangeListValue>().removeAt(index) ;
-          }
-				},
-			),			
-		);
-	}
-}
-//-----------------------------------------------------------------------------------------
-class ItemIdentity extends StatelessWidget
-{
-	const ItemIdentity({super.key, required this.property});
-	final ItemProperty property ;
-
-	@override
-	Widget build(BuildContext context)
-	{
-		return Container
-		(
-			color:const Color.fromARGB(255, 40, 40, 40),
-			child: ListTile
-			(
-				leading: property.icon, 
-				title: Text(property.name, style: const TextStyle(fontSize: 20, color: Colors.white),),
-				trailing: Text
-				(
-					property.count.toString(), 
-					style: const TextStyle(fontSize: 20, color: Colors.white),
-				),
-			) ,
+      itemBuilder: (BuildContext context, int index) 
+      {
+        return ListTile
+        ( 
+          tileColor: const Color.fromARGB(255, 40, 40, 40),
+          leading: listItems[index].icon, 
+				  title: Text(listItems[index].name, style: const TextStyle(fontSize: 20, color: Colors.white),),
+				  trailing: Text
+				  (
+					  listItems[index].count.toString(), 
+					  style: const TextStyle(fontSize: 20, color: Colors.white),
+				  ),
+        );
+      }
 		);
 	}
 }
@@ -177,26 +154,19 @@ class WorkListViewBuilder extends StatelessWidget
 		return ListView.builder
 		(
 			itemCount: listItems.length, //리스트의 개수
-			itemBuilder: (BuildContext context, int index) => Dismissible
-			(
-        key: Key(listItems[index].name),
-        child: WorkListItemIdentity(property: listItems[index]),
-				onDismissed: (direction) 
-				{
-					if(direction == DismissDirection.endToStart) 
-					{
-						context.read<ChangeListValue>().removeAt(index) ;
-          }
-				},
-			),			
+      itemBuilder: (BuildContext context, int index)
+      {
+        return WorkListItemIdentity(property: listItems[index], index: index,);
+      },
 		);
 	}
 }
 //-----------------------------------------------------------------------------------------
 class WorkListItemIdentity extends StatelessWidget
 {
-	const WorkListItemIdentity({super.key, required this.property});
+  const WorkListItemIdentity({super.key, required this.property, required this.index});
 	final ItemProperty property ;
+  final int index ;
 
 	@override
 	Widget build(BuildContext context)
@@ -213,7 +183,11 @@ class WorkListItemIdentity extends StatelessWidget
           Visibility
           (
             visible: parent!.visible ,
-            child: const Icon(Icons.delete_forever_outlined, color: Colors.red,),
+            child: InkWell
+            (
+              onTap: () {  parent.context.read<ChangeListValue>().removeAt(index) ; },  
+              child: const Icon(Icons.delete_forever_outlined, color: Colors.red,),
+            ),
           ),
           Flexible                      // Flexible에 사용해야지만 에러가 발생하지 않는다. 
           (
@@ -253,7 +227,7 @@ class AppendListWidget extends StatelessWidget
         onTap: () 
         {
           parent!.setVisible = false ;  
-//          Navigator.push(context, MaterialPageRoute(builder: (context) => const AppendList()),); 
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const NewWorkList()),); 
         }, 
 			) ,
 		);
