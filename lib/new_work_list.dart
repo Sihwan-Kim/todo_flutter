@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'model.dart';
 
 class NewWorkList extends StatefulWidget
 {
@@ -12,6 +13,10 @@ class _NewWorkList extends State<NewWorkList>
 {
   var _visibility = false;  
   set setVisible(value) => setState(() {_visibility = value;});
+
+  var _colorIndex = 0 ;
+  set setColor(value) => setState(() {_colorIndex = value;});
+
 
   @override
 	Widget build(BuildContext context)
@@ -46,7 +51,6 @@ class _NewWorkList extends State<NewWorkList>
         [
           const EditWorkName(),
           const ListColorSelect(),
-          
           Visibility
           (
             visible: _visibility,
@@ -103,16 +107,22 @@ class _ListColorSelect extends State<ListColorSelect>
   @override
 	Widget build(BuildContext context)
 	{
+     _NewWorkList? parent = context.findAncestorStateOfType<_NewWorkList>(); 
+
 		return Container
     (
       margin: const EdgeInsets.only(top:20.0), 
       color: const Color.fromARGB(255, 40, 40, 40),
       height: 60,
-      child: const ListTile
+      child: ListTile
       ( 
-        tileColor: Color.fromARGB(255, 40, 40, 40),
-        title: Text('List Color', style: TextStyle(fontSize: 20, color: Colors.white),),
-        trailing: Icon(Icons.circle, color: Colors.red,),
+        tileColor: const Color.fromARGB(255, 40, 40, 40),
+        title: const Text('List Color', style: TextStyle(fontSize: 20, color: Colors.white),),
+        trailing: InkWell
+        (
+          onTap: () { parent!.setVisible = true; },
+          child: Icon(Icons.circle, color: WorkListColor[parent!._colorIndex],),
+        ),
       ),     
     );
   }
@@ -128,19 +138,28 @@ class ColorSelect extends StatefulWidget
 //----------------------------------------------------------------------------
 class _ColorSelect extends State<ColorSelect>
 {
+  final List<bool> _selections = List.generate(5, (index) => false);
+
   @override
 	Widget build(BuildContext context)
 	{
+    _NewWorkList? parent = context.findAncestorStateOfType<_NewWorkList>(); 
+
 		return Container
     (
       margin: const EdgeInsets.only(top:20.0), 
       color: Colors.white,
       height: 60,
-      child: Row
+      child: ToggleButtons
       (
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        onPressed: (int index) 
+        { 
+          parent!.setVisible = false; 
+          parent!.setColor = index;
+        },
+        isSelected: _selections,
         children: const
-        [
+        [          
           Icon(Icons.circle, color: Colors.red,),
           Icon(Icons.circle, color: Colors.yellow,),
           Icon(Icons.circle, color: Colors.green,),
