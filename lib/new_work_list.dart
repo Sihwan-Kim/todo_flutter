@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-
-//----------------------------------------------------------------------------
-class NewWorkList extends StatelessWidget
+class NewWorkList extends StatefulWidget
 {
   const NewWorkList({super.key});
+
+  @override
+  State<NewWorkList> createState() => _NewWorkList();
+}
+//----------------------------------------------------------------------------
+class _NewWorkList extends State<NewWorkList>
+{
+  var _visibility = false;  
+  set setVisible(value) => setState(() {_visibility = value;});
 
   @override
 	Widget build(BuildContext context)
@@ -35,11 +42,16 @@ class NewWorkList extends StatelessWidget
       ),
       body: Column
       (
-        children: const
+        children:
         [
-          EditWorkName(),
-          ListColorSelect(),
-          ListFinishSelect(),
+          const EditWorkName(),
+          const ListColorSelect(),
+          
+          Visibility
+          (
+            visible: _visibility,
+            child: const ColorSelect(),
+          ),  
         ],
       ),  
       backgroundColor: Colors.black,  
@@ -106,36 +118,36 @@ class _ListColorSelect extends State<ListColorSelect>
   }
 }
 //----------------------------------------------------------------------------
-class ListFinishSelect extends StatefulWidget 
+class ColorSelect extends StatefulWidget
 {
-  const ListFinishSelect({super.key});
+  const ColorSelect({super.key});
 
   @override
-  State<ListFinishSelect> createState() => _ListFinishSelect();
+  State<ColorSelect> createState() => _ColorSelect();
 }
 //----------------------------------------------------------------------------
-class _ListFinishSelect extends State<ListFinishSelect>
+class _ColorSelect extends State<ColorSelect>
 {
-  bool _isChecked = false ;
-
   @override
 	Widget build(BuildContext context)
 	{
 		return Container
     (
       margin: const EdgeInsets.only(top:20.0), 
-      color: const Color.fromARGB(255, 40, 40, 40),
+      color: Colors.white,
       height: 60,
-      child: ListTile
-      ( 
-        tileColor: const Color.fromARGB(255, 40, 40, 40),
-        title: const Text('Finished', style: TextStyle(fontSize: 20, color: Colors.white),),
-        trailing: Switch
-        (
-          value: _isChecked,
-          onChanged: (value) { setState(() {_isChecked = value ;}); },
-        ),
-      ),     
+      child: Row
+      (
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const
+        [
+          Icon(Icons.circle, color: Colors.red,),
+          Icon(Icons.circle, color: Colors.yellow,),
+          Icon(Icons.circle, color: Colors.green,),
+          Icon(Icons.circle, color: Colors.blue,),
+          Icon(Icons.circle, color: Colors.purple,),
+        ],
+      ),
     );
   }
 }
