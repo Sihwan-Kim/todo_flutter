@@ -81,6 +81,4 @@ class ChangeListValue with ChangeNotifier
 	}
 } 
 //-----------------------------------------------------------------------------------------
-
-ChangeListValue changeListValue = ChangeListValue() ;
  

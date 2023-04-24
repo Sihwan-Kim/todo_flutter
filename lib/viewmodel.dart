@@ -3,46 +3,35 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'model.dart';
 //-----------------------------------------------------------------------------------------
-class DatabaseHelper
+
+class DatabaseControl
 {
+  Future<Database>? _database ;
   
-  final String TableName = 'WorkLists';
-//-----------------------------------------------------------------------------------------
-  Future<Database?> get database async 
+  //-----------------------------------------------------------------------------------------------------
+  void initDatabase() async
   {
-    Database db = await initDB() ;
-
-    return db;
-  }
-//-----------------------------------------------------------------------------------------
-  initDB() async
-  {
-    String path = join(await getDatabasesPath(), 'todo_database.db');
-
-    return await openDatabase
+    _database = openDatabase
     (
-      path,
-      version: 1,
-      onCreate:(db, version) async
+      join(await getDatabasesPath(), 'todo_database.db'),
+      onCreate: (db, version) 
       {
-        await db.execute("CREATE TABLE WorkLists(id INTEGER PRIMARY KEY, name TEXT, count INTEGER, colorindex INTEGER)",) ;      
+        return db.execute("CREATE TABLE worklist(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",);
       },
-      onUpgrade: (db, oldVersion, newVersion) {} 
+      version: 1,
     );
   }
-//-----------------------------------------------------------------------------------------
-  Future insert(WorkListProperty list) async 
+  //-----------------------------------------------------------------------------------------------------
+  Future<void> insertDog(WorkListProperty worklist) async 
   {
-    final db = await database;
+    final Database db = await _database!;
 
-    await db?.insert(TableName, list.toMap());
+    await db.insert
+    (
+      'worklist',
+      worklist.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
-//-----------------------------------------------------------------------------------------
-  Future<void> delete(WorkListProperty worklist) async 
-  {
-    final db = await database;
-
-    await db?.delete(TableName, where: "id = ?", whereArgs: [worklist.id],);
-  }
+  //-----------------------------------------------------------------------------------------------------
 }
-//-----------------------------------------------------------------------------------------
