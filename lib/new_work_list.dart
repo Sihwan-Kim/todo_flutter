@@ -44,7 +44,7 @@ class _NewWorkList extends State<NewWorkList>
             child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
           ),
         ],
-      ),
+      ),   
       body: Column
       (
         children:
