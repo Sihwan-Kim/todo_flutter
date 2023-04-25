@@ -14,15 +14,16 @@ class DatabaseControl
     _database = openDatabase
     (
       join(await getDatabasesPath(), 'todo_database.db'),
+
       onCreate: (db, version) 
       {
-        return db.execute("CREATE TABLE worklist(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",);
+        return db.execute("CREATE TABLE worklist(id INTEGER PRIMARY KEY, name TEXT, count INTEGER, colorIdex INTEGER)",);
       },
       version: 1,
     );
   }
   //-----------------------------------------------------------------------------------------------------
-  Future<void> insertDog(WorkListProperty worklist) async 
+  Future<void> insertWorkList(WorkListProperty worklist) async 
   {
     final Database db = await _database!;
 

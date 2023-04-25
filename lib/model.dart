@@ -69,14 +69,14 @@ class ChangeListValue with ChangeNotifier
 	{
 		if(_workList.isNotEmpty && index < _workList.length)   
 		{
-			_workList.removeAt(index) ;
+			_workList.removeAt(index);
 			notifyListeners();  
 		}
 	}
 	//-----------------------------------------------------------------------------------------
-	void append(ItemProperty Item)
+	void append(ItemProperty item)
 	{
-		_workList.add(Item) ;
+		_workList.add(item);
 		notifyListeners();  
 	}
 } 

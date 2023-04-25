@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'model.dart';
+import 'viewmodel.dart';
 
 class NewWorkList extends StatefulWidget
 {
@@ -14,9 +15,13 @@ class _NewWorkList extends State<NewWorkList>
   var _visibility = false;  
   set setVisible(value) => setState(() {_visibility = value;});
 
-  var _colorIndex = 0 ;
+  var _colorIndex = 0;  
   set setColor(value) => setState(() {_colorIndex = value;});
 
+  void _addWorkList()
+  {     
+    DatabaseControl().insertWorkList(WorkListProperty(0,'aaa',0,0)) ;
+  }
 
   @override
 	Widget build(BuildContext context)
@@ -40,7 +45,7 @@ class _NewWorkList extends State<NewWorkList>
           TextButton
           (
             style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-            onPressed: () {},
+            onPressed: () => _addWorkList() , 
             child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
           ),
         ],
@@ -50,7 +55,7 @@ class _NewWorkList extends State<NewWorkList>
         children:
         [
           const EditWorkName(),
-          const ListColorSelect(),
+          ListColorSelect(colorIndex: _colorIndex,),
           Visibility
           (
             visible: _visibility,
@@ -95,8 +100,9 @@ class _EditWorkName extends State<EditWorkName>
 }
 //----------------------------------------------------------------------------
 class ListColorSelect extends StatefulWidget 
-{
-  const ListColorSelect({super.key});
+{  
+  const ListColorSelect({super.key, required this.colorIndex});
+  final int colorIndex ;
 
   @override
   State<ListColorSelect> createState() => _ListColorSelect();
@@ -121,7 +127,7 @@ class _ListColorSelect extends State<ListColorSelect>
         trailing: InkWell
         (
           onTap: () { parent!.setVisible = true; },
-          child: Icon(Icons.circle, color: WorkListColor[parent!._colorIndex],),
+          child: Icon(Icons.circle, color: WorkListColor[widget.colorIndex],),
         ),
       ),     
     );
@@ -155,7 +161,7 @@ class _ColorSelect extends State<ColorSelect>
         onPressed: (int index) 
         { 
           parent!.setVisible = false; 
-          parent!.setColor = index;
+          parent.setColor = index;
         },
         isSelected: _selections,
         children: const
