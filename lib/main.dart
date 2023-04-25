@@ -3,6 +3,7 @@ import 'package:todo_flutter/model.dart';
 import 'package:todo_flutter/addwork.dart';
 import 'package:provider/provider.dart';
 import 'new_work_list.dart';
+import 'viewmodel.dart';
 //----------------------------------------------------------------------------
 void main() async
 {
@@ -10,12 +11,10 @@ void main() async
 	(
 		MultiProvider
 		(
-			providers: [ ChangeNotifierProvider(create: (_) => ChangeListValue()),],
+      providers: [ ChangeNotifierProvider(create: (_) => listValue),],
 			child: const MyToDoApp(),
 		),
   );
-
-  // DatabaseControl().initDatabase();
 }
 //----------------------------------------------------------------------------
 class MyToDoApp extends StatelessWidget 
@@ -82,7 +81,7 @@ class MainPageState extends State<MainPage>
 			),
 			body: ChangeNotifierProvider
 			(
-				create: (BuildContext context) => ChangeListValue(),  
+				create: (BuildContext context) => listValue, // ChangeListValue(),  
 			 	child: Column
 				(
 					crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -187,7 +186,7 @@ class WorkListItemIdentity extends StatelessWidget
             visible: parent!.visible ,
             child: InkWell
             (
-              onTap: () {  parent.context.read<ChangeListValue>().removeAt(index) ; },  
+              onTap: () { listValue.removeAt(index) ; },  
               child: const Icon(Icons.delete_forever_outlined, color: Colors.red,),
             ),
           ),
@@ -229,7 +228,7 @@ class AppendListWidget extends StatelessWidget
         onTap: () 
         {
           parent!.setVisible = false ;  
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const NewWorkList()),); 
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  const NewWorkList()),); 
         }, 
 			) ,
 		);

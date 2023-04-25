@@ -2,37 +2,60 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'model.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 //-----------------------------------------------------------------------------------------
+
+const String tableName = 'WorkList';
 
 class DatabaseControl
 {
-  Future<Database>? _database ;
-  
-  //-----------------------------------------------------------------------------------------------------
-  void initDatabase() async
-  {
-    _database = openDatabase
-    (
-      join(await getDatabasesPath(), 'todo_database.db'),
+  DatabaseControl._();
+  static final DatabaseControl _db = DatabaseControl._();
+  factory DatabaseControl() => _db;
 
-      onCreate: (db, version) 
-      {
-        return db.execute("CREATE TABLE worklist(id INTEGER PRIMARY KEY, name TEXT, count INTEGER, colorIdex INTEGER)",);
-      },
+  static Database? _database;
+
+  Future<Database?> get database async 
+  {
+    if(_database != null) return _database;
+
+    _database = await initDB();
+    return _database;
+  }
+
+  //-----------------------------------------------------------------------------------------------------
+  initDB() async 
+  {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'MyDogsDB.db');
+
+    return await openDatabase
+    (
+      path,
       version: 1,
+      onCreate: (db, version) async 
+      {
+        await db.execute('''
+          CREATE TABLE $tableName(name TEXT PRIMARY KEY, count INTEGER, colorIndex INTEGER)
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion){}
     );
   }
   //-----------------------------------------------------------------------------------------------------
-  Future<void> insertWorkList(WorkListProperty worklist) async 
+  insertData(WorkListProperty workList) async 
   {
-    final Database db = await _database!;
+    var value = 
+    {
+     'name': workList.name,
+     'count': workList.count,
+     'colorIndex':workList.colorIndex
+    };
 
-    await db.insert
-    (
-      'worklist',
-      worklist.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    final db = await database;
+    var res = await db!.insert('WorkList', value, conflictAlgorithm: ConflictAlgorithm.replace,);
+ 
+    return res;
   }
-  //-----------------------------------------------------------------------------------------------------
 }

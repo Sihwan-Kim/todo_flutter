@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'model.dart';
 import 'viewmodel.dart';
+import 'main.dart';
 
 class NewWorkList extends StatefulWidget
 {
@@ -18,9 +20,12 @@ class _NewWorkList extends State<NewWorkList>
   var _colorIndex = 0;  
   set setColor(value) => setState(() {_colorIndex = value;});
 
+  var _workName = '';
+  set setName(value) => setState(() {_workName = value;});
+
   void _addWorkList()
   {     
-    DatabaseControl().insertWorkList(WorkListProperty(0,'aaa',0,0)) ;
+    DatabaseControl().insertData(WorkListProperty(_workName,0,_colorIndex)) ;
   }
 
   @override
@@ -45,7 +50,11 @@ class _NewWorkList extends State<NewWorkList>
           TextButton
           (
             style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-            onPressed: () => _addWorkList() , 
+            onPressed: () 
+            {
+              _addWorkList() ;
+              listValue.append( WorkListProperty(_workName, 0, _colorIndex));
+            },
             child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
           ),
         ],
@@ -81,6 +90,8 @@ class _EditWorkName extends State<EditWorkName>
   @override
 	Widget build(BuildContext context)
 	{
+    _NewWorkList? parent = context.findAncestorStateOfType<_NewWorkList>(); 
+
 		return Container
     (
       margin: const EdgeInsets.only(top:20.0), 
@@ -94,6 +105,7 @@ class _EditWorkName extends State<EditWorkName>
           labelText: 'List Name' ,
           labelStyle: TextStyle(color: Colors.blueGrey ),
         ),  
+        onChanged: (value) => parent!.setName = value ,
       ),  
     );
   }

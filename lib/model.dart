@@ -10,18 +10,16 @@ enum FilterType
 //-----------------------------------------------------------------------------------------
 class WorkListProperty
 {
-  int id;
   String name ;
   int count ;
   int colorIndex ;
 
-  WorkListProperty(this.id, this.name, this.count, this.colorIndex) ;
+  WorkListProperty(this.name, this.count, this.colorIndex) ;
 
   Map<String, dynamic> toMap() 
   {
     return 
     {
-      'id': id,
       'name': name,
       'count': count,
       'colorindex' : colorIndex,
@@ -38,6 +36,8 @@ class ItemProperty
 	ItemProperty(this.name, this.count, this.icon) ;
 }
 //-----------------------------------------------------------------------------------------
+ChangeListValue listValue = ChangeListValue() ;
+
 class ChangeListValue with ChangeNotifier
 {    
 	final List<ItemProperty> _filterItems = [
@@ -74,9 +74,9 @@ class ChangeListValue with ChangeNotifier
 		}
 	}
 	//-----------------------------------------------------------------------------------------
-	void append(ItemProperty item)
+	void append(WorkListProperty item)
 	{
-		_workList.add(item);
+		_workList.add(ItemProperty(item.name, item.count, Icon(Icons.circle, color: WorkListColor[item.colorIndex],) ) );
 		notifyListeners();  
 	}
 } 
