@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter/model.dart';
-import 'package:todo_flutter/viewmodel.dart';
 import 'package:todo_flutter/addwork.dart';
 import 'package:provider/provider.dart';
 import 'new_work_list.dart';
-import 'dart:async';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 //----------------------------------------------------------------------------
 void main() async
 {
@@ -19,7 +15,7 @@ void main() async
 		),
   );
 
-  DatabaseControl().initDatabase();
+  // DatabaseControl().initDatabase();
 }
 //----------------------------------------------------------------------------
 class MyToDoApp extends StatelessWidget 
