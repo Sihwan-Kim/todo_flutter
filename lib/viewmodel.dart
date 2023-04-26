@@ -44,7 +44,7 @@ class DatabaseControl
     );
   }
   //-----------------------------------------------------------------------------------------------------
-  insertData(WorkListProperty workList) async 
+  Future<int> insertData(WorkListProperty workList) async 
   {
     var value = 
     {
@@ -58,4 +58,13 @@ class DatabaseControl
  
     return res;
   }
+  //-----------------------------------------------------------------------------------------------------
+   Future<int> deleteData(String workListName) async
+  {
+    final db = await database;
+    var res = await db!.delete('WorkList', where: 'name = ?', whereArgs: [workListName]) ;
+ 
+    return res;
+  }
+  //-----------------------------------------------------------------------------------------------------
 }

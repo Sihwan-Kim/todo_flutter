@@ -11,7 +11,7 @@ void main() async
 	(
 		MultiProvider
 		(
-      providers: [ ChangeNotifierProvider(create: (_) => listValue),],
+      providers: [ ChangeNotifierProvider(create: (_) => listValueControl),],
 			child: const MyToDoApp(),
 		),
   );
@@ -81,22 +81,22 @@ class MainPageState extends State<MainPage>
 			),
 			body: ChangeNotifierProvider
 			(
-				create: (BuildContext context) => listValue, // ChangeListValue(),  
+				create: (BuildContext context) => listValueControl, 
 			 	child: Column
 				(
 					crossAxisAlignment: CrossAxisAlignment.stretch,
 					children: 
 					[
 						const Text('Filter', style: TextStyle(fontSize: 20, color: Colors.grey),),
-            Flexible(flex: 2, fit: FlexFit.loose , child: ListViewBuilder(listItems: context.watch<ChangeListValue>().filterItems,),),
+            Flexible(flex: 2, fit: FlexFit.loose , child: ListViewBuilder(listItems: listValueControl.filterItems,),),
 						const Text('Work List', style: TextStyle(fontSize: 20, color: Colors.grey),),
             Visibility
             (
               visible: _visibility,
               child: const AppendListWidget(),
             ),
-						Flexible(flex: 1, child: WorkListViewBuilder(listItems: context.watch<ChangeListValue>().workList,),),
-						Flexible(flex: 1, child: ListViewBuilder(listItems: context.watch<ChangeListValue>().finishWork,),),
+      			Flexible(flex: 1, child: WorkListViewBuilder(listItems: listValueControl.workList,),),
+						Flexible(flex: 1, child: ListViewBuilder(listItems: listValueControl.finishWork,),),
 					],
 				),
 			),
@@ -169,6 +169,12 @@ class WorkListItemIdentity extends StatelessWidget
 	final ItemProperty property ;
   final int index ;
 
+  void _deleteWorkList()
+  {     
+    DatabaseControl().deleteData(listValueControl.workList[index].name) ;
+    listValueControl.removeAt(index) ; 
+  }  
+
 	@override
 	Widget build(BuildContext context)
 	{
@@ -184,9 +190,9 @@ class WorkListItemIdentity extends StatelessWidget
           Visibility
           (
             visible: parent!.visible ,
-            child: InkWell
+            child: InkWell      // 특정 위젯에 제스쳐 기능을 부여한다. 
             (
-              onTap: () { listValue.removeAt(index) ; },  
+              onTap: () => _deleteWorkList(),
               child: const Icon(Icons.delete_forever_outlined, color: Colors.red,),
             ),
           ),

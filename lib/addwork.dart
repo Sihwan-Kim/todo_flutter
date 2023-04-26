@@ -229,7 +229,7 @@ class WorkListSelect extends StatefulWidget
 //----------------------------------------------------------------------------
 class _WorkListSelect extends State<WorkListSelect>
 {	
-  String selectedDropdown = ChangeListValue().workList[0].name;
+  String selectedDropdown = ListValueControl().workList[0].name;
   
   @override
   Widget build(BuildContext context)
@@ -240,7 +240,7 @@ class _WorkListSelect extends State<WorkListSelect>
 			color: const Color.fromARGB(255, 40, 40, 40),
       child: ChangeNotifierProvider
       (
-	      create: (BuildContext context) => ChangeListValue(),
+	      create: (BuildContext context) => ListValueControl(),
         child: Row
         (
           children:
@@ -253,7 +253,7 @@ class _WorkListSelect extends State<WorkListSelect>
               (
                 isExpanded: true,
                 value: selectedDropdown,
-                items: context.watch<ChangeListValue>().workList.map
+                items: context.watch<ListValueControl>().workList.map
                 (
                   (ItemProperty property) 
                   { 

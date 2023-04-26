@@ -36,9 +36,9 @@ class ItemProperty
 	ItemProperty(this.name, this.count, this.icon) ;
 }
 //-----------------------------------------------------------------------------------------
-ChangeListValue listValue = ChangeListValue() ;
+ListValueControl listValueControl = ListValueControl() ;
 
-class ChangeListValue with ChangeNotifier
+class ListValueControl with ChangeNotifier
 {    
 	final List<ItemProperty> _filterItems = [
 										                        ItemProperty('Today', 0, const Icon(Icons.arrow_downward, color: Colors.red)),

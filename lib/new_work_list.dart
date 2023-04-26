@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'model.dart';
 import 'viewmodel.dart';
-import 'main.dart';
 
 class NewWorkList extends StatefulWidget
 {
@@ -25,7 +23,8 @@ class _NewWorkList extends State<NewWorkList>
 
   void _addWorkList()
   {     
-    DatabaseControl().insertData(WorkListProperty(_workName,0,_colorIndex)) ;
+    DatabaseControl().insertData(WorkListProperty(_workName, 0, _colorIndex)) ;
+    listValueControl.append( WorkListProperty(_workName, 0, _colorIndex));
   }
 
   @override
@@ -50,11 +49,7 @@ class _NewWorkList extends State<NewWorkList>
           TextButton
           (
             style: TextButton.styleFrom(foregroundColor: Colors.white,), 
-            onPressed: () 
-            {
-              _addWorkList() ;
-              listValue.append( WorkListProperty(_workName, 0, _colorIndex));
-            },
+            onPressed: () => _addWorkList(),
             child: const Text('Confirm', style: TextStyle(fontSize: 15, color: Colors.white),), 
           ),
         ],
@@ -177,13 +172,13 @@ class _ColorSelect extends State<ColorSelect>
         },
         isSelected: _selections,
         children: const
-        [          
+        [
           Icon(Icons.circle, color: Colors.red,),
           Icon(Icons.circle, color: Colors.yellow,),
           Icon(Icons.circle, color: Colors.green,),
           Icon(Icons.circle, color: Colors.blue,),
           Icon(Icons.circle, color: Colors.purple,),
-        ],
+        ]
       ),
     );
   }
