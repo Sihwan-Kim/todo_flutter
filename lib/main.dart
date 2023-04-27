@@ -88,15 +88,15 @@ class MainPageState extends State<MainPage>
 					children: 
 					[
 						const Text('Filter', style: TextStyle(fontSize: 20, color: Colors.grey),),
-            Flexible(flex: 2, fit: FlexFit.loose , child: ListViewBuilder(listItems: listValueControl.filterItems,),),
+            Flexible(flex: 2, fit: FlexFit.loose , child: ListViewBuilder(listItems: context.watch<ListValueControl>().filterItems,),),
 						const Text('Work List', style: TextStyle(fontSize: 20, color: Colors.grey),),
             Visibility
             (
               visible: _visibility,
               child: const AppendListWidget(),
             ),
-      			Flexible(flex: 1, child: WorkListViewBuilder(listItems: listValueControl.workList,),),
-						Flexible(flex: 1, child: ListViewBuilder(listItems: listValueControl.finishWork,),),
+      			Flexible(flex: 1, child: WorkListViewBuilder(listItems: context.watch<ListValueControl>().workList,),),
+						Flexible(flex: 1, child: ListViewBuilder(listItems: context.watch<ListValueControl>().finishWork,),),
 					],
 				),
 			),

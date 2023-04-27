@@ -18,13 +18,13 @@ class _NewWorkList extends State<NewWorkList>
   var _colorIndex = 0;  
   set setColor(value) => setState(() {_colorIndex = value;});
 
-  var _workName = '';
+  String _workName = '';
   set setName(value) => setState(() {_workName = value;});
 
   void _addWorkList()
   {     
-    DatabaseControl().insertData(WorkListProperty(_workName, 0, _colorIndex)) ;
-    listValueControl.append( WorkListProperty(_workName, 0, _colorIndex));
+    DatabaseControl().insertData(WorkListProperty(name:_workName, count:0, colorIndex:_colorIndex)) ;
+    listValueControl.append( WorkListProperty(name:_workName, count:0, colorIndex:_colorIndex));
   }
 
   @override
@@ -63,7 +63,7 @@ class _NewWorkList extends State<NewWorkList>
           Visibility
           (
             visible: _visibility,
-            child: const ColorSelect(),
+            child: ColorSelect(),
           ),  
         ],
       ),  
@@ -141,17 +141,10 @@ class _ListColorSelect extends State<ListColorSelect>
   }
 }
 //----------------------------------------------------------------------------
-class ColorSelect extends StatefulWidget
-{
-  const ColorSelect({super.key});
-
-  @override
-  State<ColorSelect> createState() => _ColorSelect();
-}
-//----------------------------------------------------------------------------
-class _ColorSelect extends State<ColorSelect>
+class ColorSelect extends StatelessWidget
 {
   final List<bool> _selections = List.generate(5, (index) => false);
+  ColorSelect({super.key});
 
   @override
 	Widget build(BuildContext context)

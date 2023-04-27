@@ -14,11 +14,11 @@ class WorkListProperty
   int count ;
   int colorIndex ;
 
-  WorkListProperty(this.name, this.count, this.colorIndex) ;
+  WorkListProperty({required this.name, required this.count, required this.colorIndex}) ;
 
   Map<String, dynamic> toMap() 
   {
-    return 
+    return <String, dynamic>
     {
       'name': name,
       'count': count,
