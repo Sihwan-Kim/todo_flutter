@@ -23,7 +23,6 @@ class DatabaseControl
     _database = await initDB();
     return _database;
   }
-
   //-----------------------------------------------------------------------------------------------------
   initDB() async 
   {
@@ -70,14 +69,11 @@ class DatabaseControl
   Future<List<WorkListProperty>> getAllData() async 
   {
     final db = await database;
-
-    // 모든 AssetPortfolio를 얻기 위해 테이블에 질의합니다.
     final List<Map<String, dynamic>> maps = await db!.query('WorkList');
 
-    // List<Map<String, dynamic>를 List<AssetPortfolio>으로 변환합니다.
     return List.generate
     (
-      maps.length, (i) 
+      maps.length,(i) 
       {
         return WorkListProperty
         (

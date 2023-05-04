@@ -7,6 +7,7 @@ import 'viewmodel.dart';
 //----------------------------------------------------------------------------
 void main() async
 {
+  // var list = await DatabaseControl().getAllData();
 	runApp
 	(
 		MultiProvider
@@ -147,19 +148,19 @@ class ListViewBuilder extends StatelessWidget
 class WorkListViewBuilder extends StatelessWidget
 {
 	const WorkListViewBuilder({super.key, required this.listItems});
-	final List<ItemProperty>  listItems ;
+	final List<ItemProperty> listItems ;
 
 	@override
 	Widget build(BuildContext context)
 	{
-		return ListView.builder
-		(
-			itemCount: listItems.length, //리스트의 개수
+    return ListView.builder
+    (
+      itemCount: listItems.length, //리스트의 개수
       itemBuilder: (BuildContext context, int index)
       {
-        return WorkListItemIdentity(property: listItems[index], index: index,);
+        return WorkListItemIdentity(property: listItems[index], index: index);
       },
-		);
+    );
 	}
 }
 //-----------------------------------------------------------------------------------------
